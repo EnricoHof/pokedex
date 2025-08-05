@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex - Discover Pokemon</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="/img/pokeball2.webp">
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <div class="logo"><img src="./img/pokeball2.png" alt="Pokedex-Logo"></div>
+            <h1>Pokedex</h1>
+            <div id="search"><label for="psearch">Search Pokemon:</label><input type="search" name="psearch"
+                    id="psearch" placeholder="Search Pokemon..."></div>
+        </header>
+
+        <section id="pokemon-container">
+        </section>
+        <div id="loading-spinner" style="display: none;">
+            <p>Loading Pokemon...</p>
+        </div>
+        <button id="load-more-btn">Load More Pokemon</button>
+
+        <footer>
+            <div class="logo"><img src="./img/pokeball2.png" alt="Pokedex-Logo"></div>
+            <p>© 2024 Pokédex - Gotta catch 'em all!</p>
+        </footer>
+    </div>
+    <div class="dialog" id="pokemon-modal">
+        <div class="dialog-overlay"></div>
+        <div class="dialog-content">
+            <span class="modal-nav-left">‹</span>
+            <span class="modal-nav-right">›</span>
+            <div class="dialog-header">
+                <span class="dialog-pokemon-number"></span>
+                <h2 class="dialog-pokemon-headline"></h2>
+                <span class="close-dialog">X</span>
+                <div class="dialog-pokemon-picture"></div>
+            </div>
+            <div class="dialog-pokemon-type"></div>
+            <div class="dialog-menu"></div>
+            <div class="dialog-pokemon-information"></div>
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="about">About</button>
+                <button class="tab-btn" data-tab="stats">Stats</button>
+                <button class="tab-btn" data-tab="moves">Moves</button>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="about-tab"></div>
+                <div class="tab-pane" id="stats-tab"></div>
+                <div class="tab-pane" id="moves-tab"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
