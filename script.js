@@ -41,15 +41,14 @@ function createPokemonCard(pokemon) {
             <h2>${
               pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)
             }</h2>
+            <ul class="types">
+                ${pokemon.types
+                  .map((type) => `<li class="type">${type.type.name}</li>`)
+                  .join("")}
+            </ul>
             
         </div>
     `;
-}
-
-async function testCard() {
-  const pokemon = await fetchPokemonData(25);
-  const cardHTML = createPokemonCard(pokemon);
-  document.getElementById("pokemon-container").innerHTML = cardHTML;
 }
 
 async function loadMultiplePokemon(startId, count) {
