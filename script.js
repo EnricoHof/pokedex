@@ -111,7 +111,7 @@ function fillModalContent(pokemon) {
   fillBasicInfo(pokemon);
   fillAboutTab(pokemon);
   fillStatsTab(pokemon);
-  fillMovesTab();
+  fillMovesTab(pokemon);
 }
 
 function fillBasicInfo(pokemon) {
@@ -130,27 +130,181 @@ function fillBasicInfo(pokemon) {
 
 function fillAboutTab(pokemon) {
   const typesHTML = pokemon.types
-    .map((type) => `<span class="type-badge">${type.type.name}</span>`)
+    .map((t) => {
+      const color = getTypeColor(t.type.name);
+      return `
+      <span class="type-badge" style="background:${color}">
+        <span class="type-dot"></span>${t.type.name}
+      </span>
+    `;
+    })
     .join("");
 
+  const heightM = (pokemon.height / 10).toFixed(1);
+  const weightKg = (pokemon.weight / 10).toFixed(1);
+
   document.getElementById("about-tab").innerHTML = `
-        <p><strong>Height:</strong> ${pokemon.height / 10} m</p>
-        <p><strong>Weight:</strong> ${pokemon.weight / 10} kg</p>
-        <p><strong>Types:</strong> ${typesHTML}</p>
-    `;
+    <div class="card-panel">
+      <div class="info-grid" aria-label="About Information">
+        <div class="info-label">Height</div>
+        <div class="info-value">${heightM} m</div>
+
+        <div class="info-label">Weight</div>
+        <div class="info-value">${weightKg} kg</div>
+
+        <div class="info-label">Base Experience</div>
+        <div class="info-value">${pokemon.base_experience ?? "-"}</div>
+
+        <div class="info-label">Types</div>
+        <div class="info-value type-badges">${typesHTML}</div>
+      </div>
+    </div>
+  `;
 }
 
 function fillStatsTab(pokemon) {
-  const statsHTML = pokemon.stats
-    .map(
-      (stat) => `<p><strong>${stat.stat.name}:</strong> ${stat.base_stat}</p>`
-    )
-    .join("");
-  document.getElementById("stats-tab").innerHTML = statsHTML;
+  const statColors = {
+    hp: "#ef4444",
+    attack: "#22c55e",
+    defense: "#3b82f6",
+    "special-attack": "#a855f7",
+    "special-defense": "#14b8a6",
+    speed: "#f59e0b",
+  };
+
+  const max = 255;
+
+  const rows = pokemon.stats.map((s) => {
+    const key = s.stat.name;
+    const label = statLabel(key);
+    const value = s.base_stat;
+    const color = statColors[key] || "#667eea";
+    const pct = Math.max(0, Math.min(100, (value / max) * 100));
+    return { key, label, value, color, pct };
+  });
+
+  const html = `
+    <div class="stats-grid" aria-label="Pokemon Basiswerte">
+      ${rows
+        .map(
+          (r) => `
+        <div class="stat-label">${r.label}</div>
+        <div class="stat-bar" aria-hidden="true">
+          <div class="stat-fill" style="--bar-color:${r.color}; width:0%"></div>
+        </div>
+        <div class="stat-value">${r.value}</div>
+      `
+        )
+        .join("")}
+    </div>
+    <div class="stats-legend">
+      ${rows
+        .map(
+          (r) => `
+        <span><span class="dot" style="background:${r.color}"></span>${r.label}</span>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+
+  const container = document.getElementById("stats-tab");
+  container.innerHTML = html;
+
+  requestAnimationFrame(() => {
+    container.querySelectorAll(".stat-fill").forEach((el, i) => {
+      const pct = rows[i].pct.toFixed(2) + "%";
+
+      requestAnimationFrame(() => {
+        el.style.width = pct;
+      });
+    });
+  });
+
+  function statLabel(key) {
+    switch (key) {
+      case "hp":
+        return "HP";
+      case "attack":
+        return "Attack";
+      case "defense":
+        return "Defense";
+      case "special-attack":
+        return "Sp. Atk";
+      case "special-defense":
+        return "Sp. Def";
+      case "speed":
+        return "Speed";
+      default:
+        return key;
+    }
+  }
 }
 
-function fillMovesTab() {
-  document.getElementById("moves-tab").innerHTML = "<p>Coming soon...</p>";
+function fillMovesTab(pokemon) {
+  const allMoves = pokemon.moves || [];
+  let visibleCount = 12;
+
+  const container = document.getElementById("moves-tab");
+  container.innerHTML = `
+    <div class="card-panel">
+      <div class="moves-wrap">
+        <ul class="moves-list" id="moves-list"></ul>
+        <div class="moves-actions">
+          <button class="btn-small" id="show-12">12</button>
+          <button class="btn-small" id="show-24">24</button>
+          <button class="btn-small" id="show-all">All (${allMoves.length})</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  function renderMoves(count) {
+    const list = container.querySelector("#moves-list");
+    const subset = allMoves.slice(0, count);
+
+    const items = subset
+      .map((m) => {
+        const name = m.move.name;
+        let method = "-";
+        let level = "-";
+
+        const vd = (m.version_group_details || []).find(
+          (v) => v.move_learn_method?.name
+        );
+        if (vd) {
+          method = vd.move_learn_method?.name ?? "-";
+          if (vd.level_learned_at && vd.level_learned_at > 0) {
+            level = vd.level_learned_at;
+          }
+        }
+        return `
+        <li class="move-chip">
+          <span class="name">${name}</span>
+          <span class="lvl" title="Level learned">Lv ${level}</span>
+          <span class="method" title="Learn method">${method}</span>
+        </li>
+      `;
+      })
+      .join("");
+
+    list.innerHTML = items || "<li>Keine Moves gefunden.</li>";
+  }
+
+  renderMoves(visibleCount);
+
+  container.querySelector("#show-12").addEventListener("click", () => {
+    visibleCount = 12;
+    renderMoves(visibleCount);
+  });
+  container.querySelector("#show-24").addEventListener("click", () => {
+    visibleCount = 24;
+    renderMoves(visibleCount);
+  });
+  container.querySelector("#show-all").addEventListener("click", () => {
+    visibleCount = allMoves.length;
+    renderMoves(visibleCount);
+  });
 }
 
 function closeModal() {
