@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0 auto;
 }
@@ -109,8 +115,11 @@ footer {
 }
 
 .card img {
-  width: 120px;
-  height: 120px;
+  max-width: 90%;
+  max-height: 120px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
   object-fit: contain;
 }
 
@@ -199,12 +208,13 @@ footer {
 
 header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-
   color: white;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -232,6 +242,8 @@ header #search {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  flex: 1 1 240px;
+  min-width: 0;
 }
 
 #search label {
@@ -245,7 +257,7 @@ header #search {
   border: none;
   border-radius: 25px;
   font-size: 16px;
-  width: 250px;
+  width: clamp(160px, 30vw, 250px);
   outline: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -564,9 +576,14 @@ footer p {
     font-size: 2rem;
   }
 
-  #search-input {
+  #search {
+    align-items: stretch;
+  }
+
+  #psearch {
     width: 100%;
-    max-width: 300px;
+    max-width: 500px;
+    margin: 0 auto;
   }
 }
 
@@ -593,6 +610,17 @@ footer p {
     margin: 5px;
   }
 
+  .card h2 {
+    margin: 10px 0;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block;
+  }
   .dialog-content {
     width: 90%;
     max-width: 500px;
