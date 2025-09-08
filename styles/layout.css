@@ -1,0 +1,118 @@
+/* Layout Container */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+header .logo {
+  justify-self: start;
+}
+
+.logo img {
+  width: 50px;
+  height: 50px;
+}
+
+header h1 {
+  justify-self: center;
+  font-size: 2.5rem;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header #search {
+  justify-self: end;
+}
+
+#search {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+#search label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  opacity: 0.9;
+}
+
+#psearch {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  width: clamp(160px, 30vw, 250px);
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+#psearch:focus {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
+  background: white;
+}
+
+#psearch::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Footer */
+footer {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+  width: 100%;
+}
+
+footer p {
+  margin: 10px 0 0 0;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+/* Pokemon Container */
+#pokemon-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Loading Spinner */
+#loading-spinner {
+  text-align: center;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+#loading-spinner p {
+  font-size: 18px;
+  color: #667eea;
+  font-weight: bold;
+  margin: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
