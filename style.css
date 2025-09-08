@@ -39,8 +39,8 @@ body.modal-open {
 }
 
 .dialog-pokemon-picture img {
-  width: 150px;
-  height: 150px;
+  width: 250px;
+  height: auto;
   object-fit: contain;
 }
 
@@ -280,12 +280,13 @@ header #search {
 }
 
 .tab-content {
-  min-height: 200px;
+  min-height: 300px;
 }
 
 .tab-pane {
   display: none;
-  padding: 20px 0;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .tab-pane.active {
