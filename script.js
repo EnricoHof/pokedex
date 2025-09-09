@@ -287,14 +287,17 @@ function switchToTab(tabName) {
 function handleSearchInput() {
   const searchInput = document.getElementById("psearch");
   const searchText = searchInput.value.toLowerCase();
+  const loadButton = document.getElementById("load-more-btn");
 
   if (searchText.length >= 3 || searchText.length === 0) {
     filterPokemonByName(searchText);
   }
+  loadButton.disabled = searchText.length >= 3;
 }
 
 async function handleLoadMoreClick() {
   const loadButton = document.getElementById("load-more-btn");
+  if (loadButton.disabled) return;
   loadButton.disabled = true;
 
   currentPokemonOffset += 20;
