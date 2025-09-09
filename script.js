@@ -133,7 +133,6 @@ function createStatRows(pokemonStats, colorMap, maxValue) {
       0,
       Math.min(100, (statValue / maxValue) * 100)
     );
-
     return {
       key: statKey,
       label: statLabel,
@@ -185,7 +184,6 @@ function fillModalMovesTab(pokemonData) {
 function displayMoves(container, allMoves, count) {
   const movesList = container.querySelector("#moves-list");
   const movesToShow = allMoves.slice(0, count);
-
   const movesHTML = createMovesListHTML(movesToShow);
   movesList.innerHTML = movesHTML;
 }
@@ -194,11 +192,9 @@ function displayMoves(container, allMoves, count) {
 function getMoveDetails(moveInfo) {
   let learnMethod = "-";
   let learnLevel = "-";
-
   const versionDetails = (moveInfo.version_group_details || []).find(
     (version) => version.move_learn_method?.name
   );
-
   if (versionDetails) {
     learnMethod = versionDetails.move_learn_method?.name ?? "-";
     if (
@@ -208,7 +204,6 @@ function getMoveDetails(moveInfo) {
       learnLevel = versionDetails.level_learned_at;
     }
   }
-
   return { method: learnMethod, level: learnLevel };
 }
 
@@ -228,16 +223,13 @@ function closeModal() {
 // Pokemon nach Namen filtern
 function filterPokemonByName(searchText) {
   const allPokemonCards = document.querySelectorAll(".card");
-
   allPokemonCards.forEach((card) => {
     const pokemonName = card.querySelector("h2").textContent.toLowerCase();
     const pokemonTypes = Array.from(card.querySelectorAll("li")).map((li) =>
       li.textContent.toLowerCase()
     );
-
     const matchByName = pokemonName.includes(searchText);
     const matchByType = pokemonTypes.some((type) => type.includes(searchText));
-
     if (searchText === "" || matchByName || matchByType) {
       card.style.display = "block";
     } else {
@@ -294,7 +286,6 @@ function handleSearchInput() {
   const searchInput = document.getElementById("psearch");
   const searchText = searchInput.value.toLowerCase();
   const loadButton = document.getElementById("load-more-btn");
-
   if (searchText.length >= 3) {
     filterPokemonByName(searchText);
   } else if (searchText.length === 0) {
@@ -307,10 +298,8 @@ async function handleLoadMoreClick() {
   const loadButton = document.getElementById("load-more-btn");
   if (loadButton.disabled) return;
   loadButton.disabled = true;
-
   currentPokemonOffset += 20;
   await loadAndDisplayPokemon(currentPokemonOffset + 1, 20);
-
   loadButton.disabled = false;
   window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
 }
@@ -326,7 +315,6 @@ function handleCardClick(clickEvent) {
 function handleNextPokemon() {
   const currentId = getCurrentPokemonId();
   const nextId = findNextPokemonId(currentId);
-
   if (nextId) {
     openPokemonModal(nextId);
   }
@@ -335,7 +323,6 @@ function handleNextPokemon() {
 function handlePreviousPokemon() {
   const currentId = getCurrentPokemonId();
   const previousId = findPreviousPokemonId(currentId);
-
   if (previousId) {
     openPokemonModal(previousId);
   }
