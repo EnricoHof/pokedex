@@ -231,8 +231,14 @@ function filterPokemonByName(searchText) {
 
   allPokemonCards.forEach((card) => {
     const pokemonName = card.querySelector("h2").textContent.toLowerCase();
+    const pokemonTypes = Array.from(card.querySelectorAll("li")).map((li) =>
+      li.textContent.toLowerCase()
+    );
 
-    if (pokemonName.includes(searchText)) {
+    const matchByName = pokemonName.includes(searchText);
+    const matchByType = pokemonTypes.some((type) => type.includes(searchText));
+
+    if (searchText === "" || matchByName || matchByType) {
       card.style.display = "block";
     } else {
       card.style.display = "none";
@@ -289,10 +295,12 @@ function handleSearchInput() {
   const searchText = searchInput.value.toLowerCase();
   const loadButton = document.getElementById("load-more-btn");
 
-  if (searchText.length >= 3 || searchText.length === 0) {
+  if (searchText.length >= 3) {
     filterPokemonByName(searchText);
+  } else if (searchText.length === 0) {
+    filterPokemonByName("");
   }
-  loadButton.disabled = searchText.length >= 3;
+  loadButton.disabled = searchText.length > 0;
 }
 
 async function handleLoadMoreClick() {
