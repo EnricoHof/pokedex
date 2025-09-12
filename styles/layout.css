@@ -3,16 +3,16 @@
   flex: 1;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
 }
 
 /* Header */
 header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 10px 20px;
+  padding: 10px 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
@@ -38,6 +38,17 @@ header h1 {
 
 header #search {
   justify-self: end;
+}
+
+.header-content {
+  width: 100%;
+  max-width: 960px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 #search {
