@@ -291,7 +291,7 @@ function handleSearchInput() {
   } else if (searchText.length === 0) {
     filterPokemonByName("");
   }
-  loadButton.disabled = searchText.length > 0;
+  loadButton.style.display = searchText.length >= 3 ? "none" : "";
 }
 
 async function handleLoadMoreClick() {

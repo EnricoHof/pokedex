@@ -47,6 +47,24 @@
     width: 90%;
     max-width: 500px;
     padding: 20px;
+    overflow-x: hidden;
+  }
+
+  .dialog-header {
+    width: calc(100% + 40px); /* Kompensiert das Padding */
+    margin: -20px -20px 15px -20px;
+    box-sizing: border-box;
+  }
+
+  .tab-content {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .tab-pane {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 5px; /* Platz für Scrollbar */
   }
 
   .tab-btn {
@@ -71,9 +89,16 @@
     min-height: 180px;
   }
 
+  .dialog-header {
+    margin: -20px -20px 15px -20px;
+  }
+
   .dialog-content {
-    width: 95%;
-    padding: 15px;
+    width: 95vw;
+    padding: 16px;
+    margin: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .dialog-pokemon-headline {
@@ -83,6 +108,14 @@
   .dialog-pokemon-picture img {
     width: 100px;
     height: 100px;
+  }
+
+  .modal-nav-left {
+    left: 5px;
+  }
+
+  .modal-nav-right {
+    right: 5px;
   }
 }
 
@@ -134,8 +167,19 @@
   }
 
   .dialog-content {
-    width: 95vw;
-    padding: 16px;
+    width: 100vw;
+    border-radius: 0; /* Vollbild auf sehr kleinen Geräten */
+    max-height: 100vh;
+    top: 0;
+    transform: none;
+    left: 0;
+  }
+
+  .moves-list {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
   }
 }
 
