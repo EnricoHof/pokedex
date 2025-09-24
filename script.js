@@ -63,6 +63,21 @@ function showPokemonModal() {
 async function loadPokemonIntoModal(pokemonId) {
   const pokemonData = await loadPokemonFromAPI(pokemonId);
   fillAllModalTabs(pokemonData);
+
+  const prevButton = document.querySelector('.modal-nav-left');
+  if (pokemonId === 1) {
+    prevButton.style.display = 'none';
+  } else {
+    prevButton.style.display = 'flex';
+  }
+
+  const nextButton = document.querySelector('.modal-nav-right');
+  const nextId = findNextPokemonId(pokemonId);
+  if (nextId === undefined) {
+    nextButton.style.display = 'none';
+  } else {
+    nextButton.style.display = 'flex';
+  }
 }
 
 // Alle Modal Tabs mit Daten füllen

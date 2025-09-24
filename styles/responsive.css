@@ -58,7 +58,6 @@
 
   .tab-content {
     width: 100%;
-    overflow-x: hidden;
   }
 
   .tab-pane {
@@ -69,7 +68,7 @@
 
   .tab-btn {
     padding: 10px 15px;
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
@@ -152,7 +151,7 @@
   #psearch {
     width: 100%;
     max-width: none;
-    font-size: 14px;
+    font-size: 16px;
     padding: 10px 14px;
   }
 
@@ -185,9 +184,17 @@
 
 /* Sehr kleine Screens */
 @media (max-width: 320px) {
+  #moves-tab {
+    padding: 10px;
+  }
+
+  .moves-list {
+    grid-template-columns: 1fr;
+  }
+
   .tab-btn {
-    padding: 8px 10px;
-    font-size: 12px;
+    padding: 8px 6px;
+    font-size: 16px;
   }
 
   .card {
