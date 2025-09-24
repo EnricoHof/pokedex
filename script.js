@@ -1,10 +1,15 @@
 // Aktuelle Position für das Laden von Pokemon
 let currentPokemonOffset = 0;
+const pokemonCache = {};
 
 // Pokemon Daten von der API laden
 async function loadPokemonFromAPI(pokemonId) {
+  if (pokemonCache[pokemonId]) {
+    return pokemonCache[pokemonId];
+  }
   let apiResponse = await fetch(POKEMON_API_URL + pokemonId);
   let pokemonData = await apiResponse.json();
+  pokemonCache[pokemonId] = pokemonData;
   return pokemonData;
 }
 
