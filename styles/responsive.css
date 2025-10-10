@@ -1,4 +1,3 @@
-/* Tablet */
 @media (max-width: 768px) {
   header {
     flex-direction: column;
@@ -37,7 +36,6 @@
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     font-size: 1rem;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
     display: block;
@@ -46,13 +44,13 @@
   .dialog-content {
     width: 90%;
     max-width: 500px;
-    padding: 20px;
-    overflow-x: hidden;
+    padding: 0;
   }
 
   .dialog-header {
-    width: calc(100% + 40px); /* Kompensiert das Padding */
-    margin: -20px -20px 15px -20px;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
     box-sizing: border-box;
   }
 
@@ -63,7 +61,7 @@
   .tab-pane {
     width: 100%;
     box-sizing: border-box;
-    padding-right: 5px; /* Platz für Scrollbar */
+    padding-right: 5px;
   }
 
   .tab-btn {
@@ -72,7 +70,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 480px) {
   header h1 {
     font-size: 1.5rem;
@@ -89,12 +86,15 @@
   }
 
   .dialog-header {
-    margin: -20px -20px 15px -20px;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
   }
 
   .dialog-content {
     width: 95vw;
-    padding: 16px;
+    padding: 0;
     margin: 0;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -118,7 +118,6 @@
   }
 }
 
-/* iPhone SE und ähnliche */
 @media (max-width: 375px) {
   header {
     padding: 8px 12px;
@@ -138,7 +137,6 @@
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
   }
 
-  /* Suchbereich kompakt */
   #search {
     align-items: stretch;
     flex: 1 1 auto;
@@ -166,8 +164,12 @@
   }
 
   .dialog-content {
+    .dialog-content {
+      height: 100vh;
+    }
+
     width: 100vw;
-    border-radius: 0; /* Vollbild auf sehr kleinen Geräten */
+    border-radius: 0;
     max-height: 100vh;
     top: 0;
     transform: none;
@@ -178,18 +180,47 @@
     width: 100%;
     padding: 0;
     margin: 0;
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+    .card-panel {
+      padding: 10px;
+    }
+
     box-sizing: border-box;
   }
+  #moves-tab .card-panel {
+    padding: 10px 8px;
+  }
+  #moves-tab .moves-list {
+    padding: 8px 4px 8px 6px;
+  }
+}
+#moves-tab .move-chip {
+  flex-wrap: wrap;
+  padding: 10px 10px;
+  max-width: 100%;
+}
+#moves-tab .move-chip .name {
+  flex: 1 1 100%;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+}
+#moves-tab .move-chip .lvl,
+#moves-tab .move-chip .method {
+  flex: 0 0 auto;
+}
+#moves-tab .card-panel {
+  width: 100%;
+}
+#moves-tab .moves-list {
+  gap: 8px;
 }
 
-/* Sehr kleine Screens */
 @media (max-width: 320px) {
   #moves-tab {
     padding: 10px;
-  }
-
-  .moves-list {
-    grid-template-columns: 1fr;
   }
 
   .tab-btn {
@@ -203,18 +234,16 @@
   }
 }
 
-/* Spezielle Anpassungen für kleinere Screens */
 @media (max-width: 560px) {
   .info-grid {
     grid-template-columns: 120px 1fr;
-  }
-
-  .moves-list {
-    grid-template-columns: 1fr;
   }
 
   .stats-grid {
     grid-template-columns: 100px 1fr 44px;
     gap: 8px 10px;
   }
+}
+
+@media (min-width: 321px) and (max-width: 560px) {
 }

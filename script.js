@@ -1,8 +1,23 @@
-// Aktuelle Position für das Laden von Pokemon
+function positionModalNav() {
+  const content = document.querySelector('.dialog-content');
+  const imgEl = document.querySelector('.dialog-pokemon-picture img');
+  const left = document.querySelector('.modal-nav-left');
+  const right = document.querySelector('.modal-nav-right');
+  if (!content || !imgEl || !left || !right) return;
+  const contentRect = content.getBoundingClientRect();
+  const imgRect = imgEl.getBoundingClientRect();
+  const centerY = imgRect.top + imgRect.height / 2 - contentRect.top;
+  left.style.top = `${centerY}px`;
+  right.style.top = `${centerY}px`;
+}
+
+window.addEventListener('resize', () => {
+  requestAnimationFrame(positionModalNav);
+});
+
 let currentPokemonOffset = 0;
 const pokemonCache = {};
 
-// Pokemon Daten von der API laden
 async function loadPokemonFromAPI(pokemonId) {
   if (pokemonCache[pokemonId]) {
     return pokemonCache[pokemonId];
@@ -13,12 +28,10 @@ async function loadPokemonFromAPI(pokemonId) {
   return pokemonData;
 }
 
-// Farbe für Pokemon Typ zurückgeben
 function getPokemonTypeColor(typeName) {
   return pokemonTypeColors[typeName] || "#68A090";
 }
 
-// Mehrere Pokemon laden und anzeigen
 async function loadAndDisplayPokemon(startingId, pokemonCount) {
   showLoadingSpinner();
   let allPokemonCards = "";
@@ -37,29 +50,27 @@ async function loadAndDisplayPokemon(startingId, pokemonCount) {
   hideLoadingSpinner();
 }
 
-// Lade-Animation anzeigen
 function showLoadingSpinner() {
   document.getElementById("loading-spinner").style.display = "block";
 }
 
-// Lade-Animation verstecken
 function hideLoadingSpinner() {
   document.getElementById("loading-spinner").style.display = "none";
 }
 
-// Modal Dialog öffnen
 function openPokemonModal(pokemonId) {
   showPokemonModal();
   loadPokemonIntoModal(pokemonId);
 }
 
-// Modal Dialog anzeigen
 function showPokemonModal() {
+  const y = window.scrollY || document.documentElement.scrollTop || 0;
+  document.body.dataset.scrollY = String(y);
+  document.body.style.top = `-${y}px`;
   document.querySelector(".dialog").classList.add("show");
   document.body.classList.add("modal-open");
 }
 
-// Pokemon Daten in Modal laden
 async function loadPokemonIntoModal(pokemonId) {
   const pokemonData = await loadPokemonFromAPI(pokemonId);
   fillAllModalTabs(pokemonData);
@@ -80,7 +91,6 @@ async function loadPokemonIntoModal(pokemonId) {
   }
 }
 
-// Alle Modal Tabs mit Daten füllen
 function fillAllModalTabs(pokemonData) {
   fillModalBasicInfo(pokemonData);
   fillModalAboutTab(pokemonData);
@@ -88,7 +98,6 @@ function fillAllModalTabs(pokemonData) {
   fillModalMovesTab(pokemonData);
 }
 
-// Grundlegende Pokemon Informationen im Modal anzeigen
 function fillModalBasicInfo(pokemonData) {
   const headerBackgroundColor = getPokemonTypeColor(
     pokemonData.types[0].type.name
@@ -100,20 +109,26 @@ function fillModalBasicInfo(pokemonData) {
     ".dialog-pokemon-number"
   ).textContent = `#${pokemonData.id}`;
   document.querySelector(".dialog-pokemon-headline").textContent = pokemonName;
-  document.querySelector(
-    ".dialog-pokemon-picture"
-  ).innerHTML = `<img src="${pokemonData.sprites.front_default}" alt="${pokemonData.name}">`;
+  const pictureEl = document.querySelector(".dialog-pokemon-picture");
+  pictureEl.innerHTML = `<img src="${pokemonData.sprites.front_default}" alt="${pokemonData.name}">`;
   document.querySelector(".dialog-header").style.backgroundColor =
     headerBackgroundColor;
-}
 
-// About Tab mit Pokemon Details füllen
+  const img = pictureEl.querySelector('img');
+  if (img) {
+    if (img.complete) {
+      positionModalNav();
+    } else {
+      img.onload = positionModalNav;
+    }
+  } else {
+    positionModalNav();
+  }
+}
 function fillModalAboutTab(pokemonData) {
   const aboutHTML = createAboutTabHTML(pokemonData);
   document.getElementById("about-tab").innerHTML = aboutHTML;
 }
-
-// Stats Tab mit Pokemon Statistiken füllen
 function fillModalStatsTab(pokemonData) {
   const statColorMap = getStatColorMap();
   const maxStatValue = 255;
@@ -129,8 +144,6 @@ function fillModalStatsTab(pokemonData) {
 
   animateStatBars(statsContainer, statRows);
 }
-
-// Farben für Statistiken definieren
 function getStatColorMap() {
   return {
     hp: "#ef4444",
@@ -141,8 +154,6 @@ function getStatColorMap() {
     speed: "#f59e0b",
   };
 }
-
-// Statistik Zeilen erstellen
 function createStatRows(pokemonStats, colorMap, maxValue) {
   return pokemonStats.map((statInfo) => {
     const statKey = statInfo.stat.name;
@@ -162,8 +173,6 @@ function createStatRows(pokemonStats, colorMap, maxValue) {
     };
   });
 }
-
-// Anzeigename für Statistik zurückgeben
 function getStatDisplayName(statKey) {
   const statNames = {
     hp: "HP",
@@ -175,8 +184,6 @@ function getStatDisplayName(statKey) {
   };
   return statNames[statKey] || statKey;
 }
-
-// Statistik Balken animieren
 function animateStatBars(container, statRows) {
   requestAnimationFrame(() => {
     container.querySelectorAll(".stat-fill").forEach((barElement, index) => {
@@ -187,8 +194,6 @@ function animateStatBars(container, statRows) {
     });
   });
 }
-
-// Moves Tab mit Pokemon Attacken füllen
 function fillModalMovesTab(pokemonData) {
   const allMoves = pokemonData.moves || [];
   let visibleMoveCount = 12;
@@ -199,16 +204,12 @@ function fillModalMovesTab(pokemonData) {
   displayMoves(movesContainer, allMoves, visibleMoveCount);
   setupMoveButtons(movesContainer, allMoves);
 }
-
-// Attacken anzeigen
 function displayMoves(container, allMoves, count) {
   const movesList = container.querySelector("#moves-list");
   const movesToShow = allMoves.slice(0, count);
   const movesHTML = createMovesListHTML(movesToShow);
   movesList.innerHTML = movesHTML;
 }
-
-// Details für eine Attacke ermitteln
 function getMoveDetails(moveInfo) {
   let learnMethod = "-";
   let learnLevel = "-";
@@ -226,21 +227,20 @@ function getMoveDetails(moveInfo) {
   }
   return { method: learnMethod, level: learnLevel };
 }
-
-// Move Buttons einrichten
 function setupMoveButtons(container, allMoves) {
   window.showMoves = function (count) {
     displayMoves(container, allMoves, count);
   };
 }
-
-// Modal Dialog schließen
 function closeModal() {
   document.querySelector(".dialog").classList.remove("show");
   document.body.classList.remove("modal-open");
+  const y = parseInt(document.body.dataset.scrollY || "0", 10);
+  document.body.style.top = "";
+  document.body.style.position = "";
+  document.body.style.width = "";
+  window.scrollTo(0, y);
 }
-
-// Pokemon nach Namen filtern
 function filterPokemonByName(searchText) {
   const allPokemonCards = document.querySelectorAll(".card");
   allPokemonCards.forEach((card) => {
@@ -257,38 +257,28 @@ function filterPokemonByName(searchText) {
     }
   });
 }
-
-// Alle geladenen Pokemon IDs ermitteln
 function getAllLoadedPokemonIds() {
   const pokemonCards = document.querySelectorAll(".card");
   return Array.from(pokemonCards).map((card) =>
     parseInt(card.dataset.pokemonId)
   );
 }
-
-// Nächste Pokemon ID finden
 function findNextPokemonId(currentId) {
   const loadedIds = getAllLoadedPokemonIds().sort((a, b) => a - b);
   const currentIndex = loadedIds.indexOf(currentId);
   return loadedIds[currentIndex + 1];
 }
-
-// Vorherige Pokemon ID finden
 function findPreviousPokemonId(currentId) {
   const loadedIds = getAllLoadedPokemonIds().sort((a, b) => a - b);
   const currentIndex = loadedIds.indexOf(currentId);
   return loadedIds[currentIndex - 1];
 }
-
-// Aktuelle Pokemon ID aus Modal ermitteln
 function getCurrentPokemonId() {
   const pokemonNumberText = document.querySelector(
     ".dialog-pokemon-number"
   ).textContent;
   return parseInt(pokemonNumberText.replace("#", ""));
 }
-
-// Tab wechseln
 function switchToTab(tabName) {
   document
     .querySelectorAll(".tab-btn")
@@ -300,8 +290,6 @@ function switchToTab(tabName) {
   document.querySelector(`[data-tab="${tabName}"]`).classList.add("active");
   document.getElementById(tabName + "-tab").classList.add("active");
 }
-
-// Event Handler Funktionen
 function handleSearchInput() {
   const searchInput = document.getElementById("psearch");
   const searchText = searchInput.value.toLowerCase();
@@ -347,28 +335,18 @@ function handlePreviousPokemon() {
     openPokemonModal(previousId);
   }
 }
-
-// Tab Button Click Handler
 function handleTabClick(clickEvent) {
   const targetTab = clickEvent.target.dataset.tab;
   if (targetTab) {
     switchToTab(targetTab);
   }
 }
-
-// Overlay Click Handler
 function handleOverlayClick() {
   closeModal();
 }
-
-// Initialisierung beim Laden der Seite
 loadAndDisplayPokemon(currentPokemonOffset + 1, 20);
 currentPokemonOffset += 20;
-
-// Tab Buttons einrichten
 document.querySelectorAll(".tab-btn").forEach((button) => {
   button.onclick = handleTabClick;
 });
-
-// Overlay Click einrichten
 document.querySelector(".dialog-overlay").onclick = handleOverlayClick;
